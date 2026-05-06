@@ -1,0 +1,134 @@
+package App::CriticDB;
+
+use strict;
+use warnings;
+use Carp qw/confess/;
+our $VERSION='0.0.1';
+
+sub new {
+	my ($ref,%opt)=@_;
+	my $class=ref($ref)||$ref;
+	my %self=();
+	if($opt{file})                             { %self=(mode=>'file',file=>$opt{file},type=>$opt{type}//'storable') }
+	else                                       { confess('Only file mode is available at this time') }
+	return bless(\%self,$class);
+}
+
+sub _load {
+	my ($self)=@_;
+	return $self;
+}
+
+sub collect {
+	my ($self,@paths)=@_;
+	$self->_load();
+	return $self;
+}
+
+sub report {
+	my ($self,%opt)=@_;
+	$self->_load();
+	print "(no data)\n";
+	return $self;
+}
+
+1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+App::CriticDB - Manage a database of Perl::Critic violations
+
+=head1 VERSION
+
+Version 0.0.1
+
+=head1 SYNOPSIS
+
+  use App::CriticDB;
+  my $criticdb=App::CriticDB->new(
+    ...
+  );
+  $criticdb->collect(pathspec, ...);
+  $criticdb->report();
+
+=head1 DESCRIPTION
+
+The C<perlcriticdb> tool finds and retains L<Perl::Critic> violations for a large repository of files, permits updates per file, and quick reporting of policy counts without the large runtimes of the main C<perlcritic> command.
+
+=head1 STORAGE ENGINES
+
+Violation data can be stored on disk.
+
+=head2 File
+
+L<Perl::Critic> violations may be stored in a local file:
+
+  my $criticdb=App::CriticDB->new(file=>'violations.stor',type=>'storable');
+  $criticdb->collect('/path/to/lib');
+
+The C<type> may be:
+
+  storable:  Storable (default)
+  dump:      Data::Dumper
+
+Note that L<Data::Dumper> files can be useful for debugging purposes but are not recommended for long term use, as they can be 10--30x slower for read/write operations.
+
+=head1 REPORTING
+
+By default, C<report()> will send C<perlcritic> formatted violations to standard output.
+
+More information coming soon.
+
+=head1 FILE UPDATES
+
+=head2 Detecting file updates
+
+More information coming soon.
+
+=head2 File deletions
+
+By default, the collector will re-verify the existence of all files at the beginning of each run.  Files that no longer exist are removed from the datastore.
+
+=head1 TODO
+
+=head2 Basic
+
+Version 0.0.1 offers no true functionality, but basic functionality should be available soon.
+
+=head2 Storage
+
+DBD::*. Plain file input (such as the lines produced by perlcritic normally).
+
+=head2 Reporting
+
+Support named-module hooks that handle each violation.  This will be useful for filename remapping, addition of org-specific data, and rerouting to metrics collectors.
+
+Behavior of "OK" files is not currently defined, as the datastore retains violations only.
+
+=head2 Commandline tool
+
+The script should support filter/selection similar to `perlcritic`, specifically severity selection and include/exclude.  File aggregation may also be useful, but should not be the default.  Suppose a --nodelete option to prevent removal of missing files.
+
+=head1 BUGS
+
+There may be issues with C<perlcritic --format>, which could affect the parser/collector and the reporting step.
+
+=head1 SEE ALSO
+
+L<Perl::Critic>
+
+=head1 AUTHORS
+
+Brian Blackmore (brian@mediaalpha.com).
+
+=head1 COPYRIGHT
+
+  Copyright (c) 2025--2035, MediaAlpha.com.
+
+This library is free software; you can redistribute it and/or modify it under the terms of the GNU Library General Public License Version 3 as published by the Free Software Foundation.
+
+=cut
