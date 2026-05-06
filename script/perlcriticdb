@@ -9,16 +9,37 @@ use Pod::Usage;
 use App::CriticDB;
 
 my %opt=(
-	help=>undef,
-	man =>undef,
+	help =>undef,
+	man  =>undef,
+	#
+	file =>undef,
+	type =>undef,
+	paths=>[],
+	#
+	profile=>undef,
+	# force  =>undef, # force all timestamps to 'newer', force delete, etc.?
 );
 GetOptions(
 	'help'     =>\$opt{help},
 	'man'      =>\$opt{man},
+	#
+	'file=s'   =>\$opt{file},
+	'type=s'   =>\$opt{type},
+	#
+	'profile=s'=>\$opt{profile},
+	#
+	'<>'       =>sub { my ($x)=@_; push @{$opt{paths}},$x },
 );
 
 if($opt{man})  { pod2usage(-verbose=>2,-exitval=>2) }
 if($opt{help}) { pod2usage(-verbose=>1,-exitval=>2) }
+
+my $criticdb;
+if($opt{file})     { $criticdb=App::CriticDB->new(file=>$opt{file},type=>$opt{type}//'storable',profile=>$opt{profile}) }
+if(!$criticdb)     { die 'No database specified' }
+if(@{$opt{paths}}) { $criticdb->collect(@{$opt{paths}}) }
+
+$criticdb->report();
 
 __END__
 
@@ -30,7 +51,11 @@ perlcriticdb - Commandline interface to Critic violations database
 
 =head1 SYNOPSIS
 
-  perlcriticdb [ --man | --help ]
+  perlcriticdb
+    [ --file=violations.ext [ --type=storable ] ]
+    [ --profile=file ]
+    [ --man | --help ]
+    [ FILE | DIRECTORY ]
 
 =head1 DESCRIPTION
 

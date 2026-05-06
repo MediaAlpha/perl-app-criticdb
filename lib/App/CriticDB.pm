@@ -5,30 +5,49 @@ use warnings;
 use Carp qw/confess/;
 our $VERSION='0.0.1';
 
+use App::CriticDB::Collector;
+use App::CriticDB::DB;
+
 sub new {
 	my ($ref,%opt)=@_;
 	my $class=ref($ref)||$ref;
-	my %self=();
+	my %self;
 	if($opt{file})                             { %self=(mode=>'file',file=>$opt{file},type=>$opt{type}//'storable') }
 	else                                       { confess('Only file mode is available at this time') }
+	@self{qw/profile/}=@opt{qw/profile/};
 	return bless(\%self,$class);
 }
 
 sub _load {
 	my ($self)=@_;
+	if($$self{db}) { return }
+	$$self{db}=App::CriticDB::DB->new(%$self);
 	return $self;
 }
 
 sub collect {
 	my ($self,@paths)=@_;
 	$self->_load();
+	$$self{collector}//=App::CriticDB::Collector->new(
+		profile=>$$self{profile},
+		store=>sub{$$self{db}->store(@_)},
+		flush=>sub{$$self{db}->flush(@_)},
+		newer=>sub{$$self{db}->newer(@_)},
+		);
+	$$self{collector}->collect(@paths);
 	return $self;
 }
 
 sub report {
 	my ($self,%opt)=@_;
 	$self->_load();
-	print "(no data)\n";
+	while(my ($fn,$record)=each %{$$self{db}{store}{file}}) {
+	foreach my $violation (@{$$record{violations}}) {
+		print sprintf("%s: %s at line %d, column %d.  (Severity: %d)\n"
+			,$fn
+			,@$violation{qw/desc line col sev/}
+			);
+	} }
 	return $self;
 }
 
