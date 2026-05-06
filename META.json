@@ -13,7 +13,8 @@
 		"runtime": {
 			"requires": {
 				"perl": "0",
-				"Carp": "0"
+				"Carp": "0",
+				"Perl::Critic": "0"
 			},
 			"suggests": {
 				"Data::Dumper": "2.183",

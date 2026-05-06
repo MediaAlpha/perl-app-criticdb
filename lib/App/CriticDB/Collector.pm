@@ -1,0 +1,61 @@
+package App::CriticDB::Collector;
+
+use strict;
+use warnings;
+use Carp qw/confess/;
+use Perl::Critic;
+use Perl::Critic::Utils;
+
+sub new {
+	my ($ref,%opt)=@_;
+	my $class=ref($ref)||$ref;
+	my %self=map {$_=>$opt{$_}} qw/store flush newer profile/;
+	$self{profile}//='';
+	foreach my $k (grep {'CODE' ne ref($self{$_})} qw/store flush newer/) { delete($self{$k}) }
+	return bless(\%self,$class);
+}
+
+sub store {
+	my ($self,$fn,@violations)=@_;
+	if(!$$self{store}) { return $self }
+	&{$$self{store}}(file=>$fn,violations=>\@violations);
+}
+
+sub flush {
+	my ($self,$fn)=@_;
+	if(!$$self{flush}) { return $self }
+	&{$$self{flush}}($fn);
+}
+
+sub newer {
+	my ($self,$fn)=@_;
+	if(!$$self{newer}) { return 1 }
+	&{$$self{newer}}($fn);
+}
+
+sub _critique {
+	my ($self,$fn)=@_;
+	my @violations;
+	eval { @violations=$$self{critic}->critique($fn) };
+	if($@) { return {error=>$@} }
+	foreach my $v (grep {'ARRAY' eq ref($$_{_explanation})} @violations) { $$v{_explanation}=[@{$$v{_explanation}}] } # unbless ReadOnly objects
+	return @violations;
+}
+
+sub collect {
+	my ($self,@paths)=@_;
+	$$self{critic}//=Perl::Critic->new(-profile=>$$self{profile},-severity=>1,-top=>1e6,-verbose=>1);
+	my (@valid,@gone);
+	foreach my $path (@paths) {
+		if(-e $path) { push @valid,$path }
+		else         { push @gone,$path }
+	}
+	if(@gone) { confess("Unable to handle missing paths:  @gone") }
+	foreach my $fn (sort {int(rand(3))-1} grep {$self->newer($_)} Perl::Critic::Utils::all_perl_files(@valid)) {
+		my @violations=$self->_critique($fn);
+		$self->store($fn,@violations);
+		$self->flush($fn);
+	}
+}
+
+1;
