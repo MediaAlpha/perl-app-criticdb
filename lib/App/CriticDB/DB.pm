@@ -1,8 +1,10 @@
 package App::CriticDB::DB;
 
-#use strict;
+use strict;
 use warnings;
 use Carp qw/confess/;
+
+use App::CriticDB::DB::Index;
 
 our $VERSION='0.0.1';
 
@@ -31,6 +33,10 @@ sub _initStore {
 	my ($self)=@_;
 	return (
 		version=>1001,
+		index=>{
+			policy=>App::CriticDB::DB::Index->new(values=>'id',prefix=>'p:'),
+			'policy-file'=>App::CriticDB::DB::Index->new(values=>'set'),
+		},
 		file=>{},
 	);
 }
@@ -66,6 +72,13 @@ sub _violation {
 	}
 	elsif('HASH' eq ref($V)) { %res=%$V }
 	else { confess('Invalid type of violation') }
+	$res{file}=$fn; # added for IndexSet construction
+	foreach my $ka (keys %res) {
+		if(defined($$self{store}{index}{$ka})) { $res{$ka}=$$self{store}{index}{$ka}->upsert($res{$ka}) }
+		foreach my $kb (grep {$_ ne $ka} keys %res) {
+			if($$self{store}{index}{"$ka-$kb"}) { $$self{store}{index}{"$ka-$kb"}->add(@res{$ka,$kb}) }
+		}
+	}
 	delete($res{file}); # not needed in the stored violation
 	return %res;
 }
