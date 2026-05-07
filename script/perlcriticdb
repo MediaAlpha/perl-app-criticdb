@@ -61,10 +61,6 @@ perlcriticdb - Commandline interface to Critic violations database
 
 C<perlcriticdb> is a tool to invoke C<perlcritic>, store violations in a local datastore, and build reports from of collected L<Perl::Critic> violation data.
 
-=head1 BUGS
-
-Version 0.0.1 doesn't do anything.
-
 =head1 AUTHORS
 
 Brian Blackmore (brian@mediaalpha.com).

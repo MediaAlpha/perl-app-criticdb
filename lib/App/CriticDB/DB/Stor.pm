@@ -25,7 +25,7 @@ sub read {
 sub write {
 	my ($self,$fn)=@_;
 	if(!$$self{file}) { confess("Filename has not been specified") }
-	if($fn&&$self->_fileNewer($$self{file},$$self{mtime})) { confess("File changed underneath us, not yet handled") }
+	if((-e $$self{file})&&$self->_fileNewer($$self{file},$$self{mtime})) { confess("File changed underneath us, not yet handled") }
 	open(my $fh,'>>',$$self{file}) or confess("Cannot write to $$self{file}:  $!");
 	flock($fh, LOCK_EX) or confess("Cannot lock $$self{file} for writing:  $!");
 	truncate($fh,0);
@@ -52,7 +52,9 @@ Version 0.0.1
 
 =head1 SYNOPSIS
 
-  my $db=App::CriticDB::DB->new(mode=>'file',file=>'path.stor',type=>'storable);
+  my $db=App::CriticDB::DB->new(mode=>'file',file=>'path.stor',type=>'storable');
+  $db->store($filename,@violations);
+  $db->write();
 
 =head1 DESCRIPTION
 

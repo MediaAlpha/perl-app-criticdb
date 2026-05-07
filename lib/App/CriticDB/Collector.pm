@@ -59,3 +59,78 @@ sub collect {
 }
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+App::CriticDB::Collector - Collect Perl::Critic violations for files
+
+=head1 VERSION
+
+Version 0.0.1
+
+=head1 SYNOPSIS
+
+  use App::CriticDB::Collector;
+  my $collector=App::CriticDB::Collector->new(
+    profile=>'path',
+    store  =>sub { callback },
+    flush  =>sub { callback },
+    newer  =>sub { callback },
+  );
+  $collector->collect(@paths);
+
+=head1 DESCRIPTION
+
+The Collector builds a C<Perl::Critic> instance to retrieve violations at any severity and stores them via callback (to datastore providers).
+
+=head2 Caveats
+
+The collect defaults to the C<top> one million violations per file.
+
+=head1 CALLBACKS
+
+Discovered violations are passed to a datastore via the configured callbacks.
+
+=head2 Store
+
+Store a list of violations associated with a file:
+
+  store(file=>'name',violations=>[...])
+
+The current time is stored as the mtime associated with the update.  Depending on the datastore, updates may only be committed to memory.
+
+=head2 Flush
+
+Force the updates to be saved in the datastore.  A datastore may queue updates from C<store> to reduce overhead, but C<flush> will ensure updates are committed.
+
+Because violation storage includes the current mtime, results that are not committed will be rescanned by the collector on the next run.
+
+=head2 Newer
+
+If defined, files will be skipped if their current on-disk mtime is less than or equal to their mtime in the datastore.  Files not in the datastore are always included.
+
+=head1 TODO
+
+The Collector should support all standard and reasonable C<perlcritic> commandline options.
+
+Provide a mode where files are always "newer" (forced rescan).
+
+=head1 SEE ALSO
+
+L<Perl::Critic>
+
+=head1 AUTHORS
+
+Brian Blackmore (brian@mediaalpha.com).
+
+=head1 COPYRIGHT
+
+  Copyright (c) 2025--2035, MediaAlpha.com.
+
+This library is free software; you can redistribute it and/or modify it under the terms of the GNU Library General Public License Version 3 as published by the Free Software Foundation.
+
+=cut

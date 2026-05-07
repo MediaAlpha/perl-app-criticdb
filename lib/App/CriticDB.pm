@@ -91,38 +91,42 @@ L<Perl::Critic> violations may be stored in a local file:
 
 The C<type> may be:
 
-  storable:  Storable (default)
-  dump:      Data::Dumper
+  storable   Storable (default)
+  dump       Data::Dumper (not yet available)
 
 Note that L<Data::Dumper> files can be useful for debugging purposes but are not recommended for long term use, as they can be 10--30x slower for read/write operations.
 
 =head1 REPORTING
 
-By default, C<report()> will send C<perlcritic> formatted violations to standard output.
+Currently only emits formatted violations to standard output, similar to C<perlcritic>.
 
-More information coming soon.
+More information and options coming soon.
 
 =head1 FILE UPDATES
 
 =head2 Detecting file updates
 
-More information coming soon.
+Violations are stored together with the current I<mtime> for each file.  On subsequent scans, files will be skipped unless their on-disk I<mtime> exceeds the previous value.
 
 =head2 File deletions
 
-By default, the collector will re-verify the existence of all files at the beginning of each run.  Files that no longer exist are removed from the datastore.
+(Not yet supported)  By default, the collector will re-verify the existence of all files at the beginning of each run.  Files that no longer exist are removed from the datastore.
 
 =head1 TODO
 
-=head2 Basic
+=head2 Collection
 
-Version 0.0.1 offers no true functionality, but basic functionality should be available soon.
+File deletion, ie removal of files that no longer exist.
+
+Newer file discovery:  Add support for any combination of timestamp/filesize/MD5 method for determining files that need scanned.
 
 =head2 Storage
 
 DBD::*. Plain file input (such as the lines produced by perlcritic normally).
 
 =head2 Reporting
+
+Support for proper C<perlcritic> C<--format> strings.
 
 Support named-module hooks that handle each violation.  This will be useful for filename remapping, addition of org-specific data, and rerouting to metrics collectors.
 

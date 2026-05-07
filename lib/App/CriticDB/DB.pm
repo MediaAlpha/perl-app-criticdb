@@ -110,3 +110,42 @@ sub write { confess('Unimplemented abstract') }
 
 __END__
 
+=pod
+
+=head1 NAME
+
+App::CriticDB::DB - Datastores for Perl::Critic violations
+
+=head1 VERSION
+
+Version 0.0.1
+
+=head1 SYNOPSIS
+
+  use App::CriticDB::DB;
+  my $db=App::CriticDB::DB->new(
+    mode=>'file',
+    file=>'path',
+    type=>'storable',
+  );
+  if($db->newer($filename)) {
+    my @violations=...;
+    $db->store(file=>$filename,violations=>\@violations);
+    $db->flush();
+  }
+
+=head1 DESCRIPTION
+
+The datastore manager for per-file Perl::Critic violation data, supporting creation, upgrade, and management of the data storage subclasses.
+
+=head1 AUTHORS
+
+Brian Blackmore (brian@mediaalpha.com).
+
+=head1 COPYRIGHT
+
+  Copyright (c) 2025--2035, MediaAlpha.com.
+
+This library is free software; you can redistribute it and/or modify it under the terms of the GNU Library General Public License Version 3 as published by the Free Software Foundation.
+
+=cut
