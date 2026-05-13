@@ -7,7 +7,7 @@ use Carp qw/confess/;
 use Fcntl qw/:flock/;
 use Storable qw/nstore_fd fd_retrieve/;
 
-our $VERSION='0.0.1';
+our $VERSION='0.0.2';
 
 sub read {
 	my ($self)=@_;
@@ -48,7 +48,7 @@ App::CriticDB::DB::Stor - Storable database for App::CriticDB
 
 =head1 VERSION
 
-Version 0.0.1
+Version 0.0.2
 
 =head1 SYNOPSIS
 

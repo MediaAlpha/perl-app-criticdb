@@ -1,12 +1,14 @@
-"App::CriticDB" Version 0.0.1
+"App::CriticDB" Version 0.0.2
 
 Abstract:
 ---------
 This package provides a mechanism to store and retrieve Perl::Critic violations for a collection of files.
 
-What's new in version 0.0.1:
+What's new in version 0.0.2:
 ----------------------------
-* No functionality, packaging only
+* Collection for new and changed files
+* File storage via Storable
+* Basic reporting
 
 Copyright & License:
 --------------------

@@ -3,6 +3,7 @@ package App::CriticDB::DB::Index;
 use strict;
 use warnings;
 use Carp qw/confess/;
+our $VERSION='0.0.2';
 
 my %vtypes=(
 	id =>'App::CriticDB::DB::Index::Id',
@@ -33,7 +34,7 @@ App::CriticDB::DB::Index - Permit storage of raw-or-indexed values
 
 =head1 VERSION
 
-Version 0.0.1
+Version 0.0.2
 
 =head1 SYNOPSIS
 

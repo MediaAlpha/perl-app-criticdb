@@ -1,5 +1,6 @@
 package App::CriticDB::DB::Index::Set;
 use parent 'App::CriticDB::DB::Index';
+our $VERSION='0.0.2';
 
 sub init {
 	my ($self)=@_;
@@ -46,7 +47,7 @@ App::CriticDB::DB::Index::Set - Store sets associated with names
 
 =head1 VERSION
 
-Version 0.0.1
+Version 0.0.2
 
 =head1 SYNOPSIS
 

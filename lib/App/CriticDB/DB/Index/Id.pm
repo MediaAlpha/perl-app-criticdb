@@ -1,5 +1,6 @@
 package App::CriticDB::DB::Index::Id;
 use parent 'App::CriticDB::DB::Index';
+our $VERSION='0.0.2';
 
 sub init {
 	my ($self)=@_;
@@ -44,7 +45,7 @@ App::CriticDB::DB::Index::Id - Store redundant strings as prefixed IDs
 
 =head1 VERSION
 
-Version 0.0.1
+Version 0.0.2
 
 =head1 SYNOPSIS
 

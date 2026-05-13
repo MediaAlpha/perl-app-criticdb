@@ -3,10 +3,11 @@ package App::CriticDB;
 use strict;
 use warnings;
 use Carp qw/confess/;
-our $VERSION='0.0.1';
 
 use App::CriticDB::Collector;
 use App::CriticDB::DB;
+
+our $VERSION='0.0.2';
 
 sub new {
 	my ($ref,%opt)=@_;
@@ -63,7 +64,7 @@ App::CriticDB - Manage a database of Perl::Critic violations
 
 =head1 VERSION
 
-Version 0.0.1
+Version 0.0.2
 
 =head1 SYNOPSIS
 

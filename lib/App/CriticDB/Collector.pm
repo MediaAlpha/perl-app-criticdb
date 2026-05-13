@@ -6,6 +6,8 @@ use Carp qw/confess/;
 use Perl::Critic;
 use Perl::Critic::Utils;
 
+our $VERSION='0.0.2';
+
 sub new {
 	my ($ref,%opt)=@_;
 	my $class=ref($ref)||$ref;
@@ -70,7 +72,7 @@ App::CriticDB::Collector - Collect Perl::Critic violations for files
 
 =head1 VERSION
 
-Version 0.0.1
+Version 0.0.2
 
 =head1 SYNOPSIS
 
