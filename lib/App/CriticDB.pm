@@ -29,6 +29,7 @@ sub _load {
 sub collect {
 	my ($self,@paths)=@_;
 	$self->_load();
+	$$self{db}->cleanup();
 	$$self{collector}//=App::CriticDB::Collector->new(
 		profile=>$$self{profile},
 		store=>sub{$$self{db}->store(@_)},
@@ -111,15 +112,17 @@ Violations are stored together with the current I<mtime> for each file.  On subs
 
 =head2 File deletions
 
-(Not yet supported)  By default, the collector will re-verify the existence of all files at the beginning of each run.  Files that no longer exist are removed from the datastore.
+The collector will re-verify the existence of all files at the beginning of each run.  Files that no longer exist are removed from the datastore.
 
 =head1 TODO
 
 =head2 Collection
 
-File deletion, ie removal of files that no longer exist.
-
 Newer file discovery:  Add support for any combination of timestamp/filesize/MD5 method for determining files that need scanned.
+
+Change from "current time" to actual file mtimes during data collection.
+
+File deletion currently always happens.  Add an option to retain missing files.
 
 =head2 Storage
 

@@ -103,6 +103,15 @@ sub newer {
 	return $self->_fileNewer($fn,$$self{store}{file}{$fn}{mtime}//0);
 }
 
+sub cleanup {
+	my ($self)=@_;
+	if(my @remove=grep {!-e $_} keys %{$$self{store}{file}}) {
+		foreach my $idx (values %{$$self{store}{index}}) { $idx->remove(@remove) }
+		delete(@{$$self{store}{file}}{@remove});
+	}
+	return $self;
+}
+
 sub read  { confess('Unimplemented abstract') }
 sub write { confess('Unimplemented abstract') }
 

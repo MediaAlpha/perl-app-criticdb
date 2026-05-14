@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use App::CriticDB::DB::Index;
-use Test::More tests=>3;
+use Test::More tests=>4;
 
 subtest 'initialization'=>sub{
 	plan tests=>2;
@@ -41,3 +41,21 @@ subtest 'selection'=>sub {
 	@res=$index->all(); is(ref($res[0]),'ARRAY','Shape (undef,undef)');
 };
 
+subtest 'removal'=>sub{
+	plan tests=>6;
+	my $index=App::CriticDB::DB::Index->new(values=>'set');
+	$index->add(qw/apple  one/);
+	$index->add(qw/apple  two/);
+	$index->add(qw/cherry two/);
+	$index->add(qw/cherry three/);
+	$index->add(qw/grape  three/);
+	$index->remove('cherry','grape');
+	is(scalar($index->all()),2,'Removal:  cherry+grape');
+	is(scalar($index->all('cherry')),0,'Removal:  cherry');
+	is(scalar($index->all('grape')), 0,'Removal:  grape');
+	is(scalar($index->all('apple')),2,'Retained:  apple');
+	$index->remove('two');
+	is(scalar($index->all('apple')),1,'Value removal:  two');
+	$index->remove();
+	is(scalar($index->all()),1,'No-op');
+};

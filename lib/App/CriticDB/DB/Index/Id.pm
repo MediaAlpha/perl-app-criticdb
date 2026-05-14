@@ -29,8 +29,14 @@ sub value {
 }
 
 sub remove {
-	my ($self);
-	return;
+	my ($self,@K)=@_;
+	if(!@K) { return $self }
+	foreach my $k (@K) {
+		my $idx=$$self{kv}{$k};
+		if($idx=~/^\Q$$self{prefix}\E(?<idx>\d+)/) { $$self{vk}[$+{idx}]=undef }
+		delete($$self{kv}{$k});
+	}
+	return $self;
 }
 
 1;

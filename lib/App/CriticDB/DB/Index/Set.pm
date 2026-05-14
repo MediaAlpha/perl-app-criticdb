@@ -31,8 +31,12 @@ sub all {
 }
 
 sub remove {
-	my ($self);
-	return;
+	my ($self,@K)=@_;
+	if(@K) {
+		delete(@{$$self{kset}}{@K});
+		foreach my $V (values %{$$self{kset}}) { delete(@$V{@K}) }
+	}
+	return $self;
 }
 
 1;
