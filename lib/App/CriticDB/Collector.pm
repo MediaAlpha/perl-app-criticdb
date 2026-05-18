@@ -11,8 +11,9 @@ our $VERSION='0.0.2';
 sub new {
 	my ($ref,%opt)=@_;
 	my $class=ref($ref)||$ref;
-	my %self=map {$_=>$opt{$_}} qw/store flush newer profile/;
+	my %self=map {$_=>$opt{$_}} qw/store flush newer profile debug/;
 	$self{profile}//='';
+	$self{debug}//={};
 	foreach my $k (grep {'CODE' ne ref($self{$_})} qw/store flush newer/) { delete($self{$k}) }
 	return bless(\%self,$class);
 }
@@ -38,6 +39,7 @@ sub newer {
 sub _critique {
 	my ($self,$fn)=@_;
 	my @violations;
+	if($$self{debug}{critique}) { print STDERR "Critique $fn\n" }
 	eval { @violations=$$self{critic}->critique($fn) };
 	if($@) { return {error=>$@} }
 	foreach my $v (grep {'ARRAY' eq ref($$_{_explanation})} @violations) { $$v{_explanation}=[@{$$v{_explanation}}] } # unbless ReadOnly objects

@@ -15,7 +15,7 @@ sub new {
 	my %self;
 	if($opt{file})                             { %self=(mode=>'file',file=>$opt{file},type=>$opt{type}//'storable') }
 	else                                       { confess('Only file mode is available at this time') }
-	@self{qw/profile/}=@opt{qw/profile/};
+	@self{qw/profile debug/}=@opt{qw/profile debug/};
 	return bless(\%self,$class);
 }
 
@@ -32,6 +32,7 @@ sub collect {
 	$$self{db}->cleanup();
 	$$self{collector}//=App::CriticDB::Collector->new(
 		profile=>$$self{profile},
+		debug=>$$self{debug},
 		store=>sub{$$self{db}->store(@_)},
 		flush=>sub{$$self{db}->flush(@_)},
 		newer=>sub{$$self{db}->newer(@_)},
