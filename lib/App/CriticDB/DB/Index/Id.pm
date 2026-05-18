@@ -1,5 +1,9 @@
 package App::CriticDB::DB::Index::Id;
+use strict;
+use warnings;
+
 use parent 'App::CriticDB::DB::Index';
+
 our $VERSION='0.0.2';
 
 sub init {
@@ -31,7 +35,7 @@ sub value {
 sub remove {
 	my ($self,@K)=@_;
 	if(!@K) { return $self }
-	foreach my $k (@K) {
+	foreach my $k (grep {defined($$self{kv}{$_})} @K) {
 		my $idx=$$self{kv}{$k};
 		if($idx=~/^\Q$$self{prefix}\E(?<idx>\d+)/) { $$self{vk}[$+{idx}]=undef }
 		delete($$self{kv}{$k});

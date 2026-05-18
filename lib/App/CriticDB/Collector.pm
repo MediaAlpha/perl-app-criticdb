@@ -1,7 +1,7 @@
 package App::CriticDB::Collector;
-
 use strict;
 use warnings;
+
 use Carp qw/confess/;
 use Perl::Critic;
 use Perl::Critic::Utils;

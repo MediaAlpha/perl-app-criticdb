@@ -1,7 +1,7 @@
 package App::CriticDB::DB;
-
 use strict;
 use warnings;
+
 use Carp qw/confess/;
 
 use App::CriticDB::DB::Index;
@@ -47,10 +47,17 @@ sub _init {
 	return $self->write();
 }
 
+sub _filemtime {
+	my ($fn)=@_;
+	if(!-e $fn) { return }
+	return (stat($fn))[9];
+}
+
 sub _fileNewer {
 	my ($self,$fn,$ts)=@_;
-	if(!-e $fn) { return }
-	return (stat($fn))[9]>$ts;
+	my $tm=_filemtime($fn);
+	if(!$tm) { return }
+	return ($tm>$ts);
 }
 
 sub _violation {
@@ -88,7 +95,7 @@ sub store {
 	if(!$opt{file}) { return $self }
 	my @violations=map {+{$self->_violation($opt{file},$_)}} @{$opt{violations}//[]};
 	$$self{store}{file}{$opt{file}}{violations}=\@violations;
-	$$self{store}{file}{$opt{file}}{mtime}=time();
+	$$self{store}{file}{$opt{file}}{mtime}=_filemtime($opt{file})//$opt{mtime}//time();
 	return $self;
 }
 

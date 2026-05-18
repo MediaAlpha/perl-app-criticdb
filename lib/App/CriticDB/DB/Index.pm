@@ -1,8 +1,9 @@
 package App::CriticDB::DB::Index;
-
 use strict;
 use warnings;
+
 use Carp qw/confess/;
+
 our $VERSION='0.0.2';
 
 my %vtypes=(

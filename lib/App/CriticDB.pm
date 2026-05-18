@@ -1,7 +1,7 @@
 package App::CriticDB;
-
 use strict;
 use warnings;
+
 use Carp qw/confess/;
 
 use App::CriticDB::Collector;
@@ -119,8 +119,6 @@ The collector will re-verify the existence of all files at the beginning of each
 =head2 Collection
 
 Newer file discovery:  Add support for any combination of timestamp/filesize/MD5 method for determining files that need scanned.
-
-Change from "current time" to actual file mtimes during data collection.
 
 File deletion currently always happens.  Add an option to retain missing files.
 

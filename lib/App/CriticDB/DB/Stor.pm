@@ -1,8 +1,9 @@
 package App::CriticDB::DB::Stor;
-use parent App::CriticDB::DB;
-
 use strict;
 use warnings;
+
+use parent 'App::CriticDB::DB';
+
 use Carp qw/confess/;
 use Fcntl qw/:flock/;
 use Storable qw/nstore_fd fd_retrieve/;

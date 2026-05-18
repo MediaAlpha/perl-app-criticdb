@@ -1,5 +1,9 @@
 package App::CriticDB::DB::Index::Set;
+use strict;
+use warnings;
+
 use parent 'App::CriticDB::DB::Index';
+
 our $VERSION='0.0.2';
 
 sub init {
