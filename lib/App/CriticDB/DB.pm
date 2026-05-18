@@ -6,7 +6,7 @@ use Carp qw/confess/;
 
 use App::CriticDB::DB::Index;
 
-our $VERSION='0.0.2';
+our $VERSION='0.0.3';
 
 my %engines=(
 	storable=>'App::CriticDB::DB::Stor',
@@ -134,7 +134,7 @@ App::CriticDB::DB - Datastores for Perl::Critic violations
 
 =head1 VERSION
 
-Version 0.0.2
+Version 0.0.3
 
 =head1 SYNOPSIS
 

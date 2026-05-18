@@ -1,5 +1,5 @@
 {
-	"version" : "0.0.2",
+	"version" : "0.0.3",
 	"name"    : "App-CriticDB",
 	"author"  : ["Brian Blackmore <brian@mediaalpha.com>"],
 	"abstract": "Store Perl::Critic violations",

@@ -7,7 +7,7 @@ use Carp qw/confess/;
 use App::CriticDB::Collector;
 use App::CriticDB::DB;
 
-our $VERSION='0.0.2';
+our $VERSION='0.0.3';
 
 sub new {
 	my ($ref,%opt)=@_;
@@ -66,7 +66,7 @@ App::CriticDB - Manage a database of Perl::Critic violations
 
 =head1 VERSION
 
-Version 0.0.2
+Version 0.0.3
 
 =head1 SYNOPSIS
 
