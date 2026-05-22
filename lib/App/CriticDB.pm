@@ -6,6 +6,7 @@ use Carp qw/confess/;
 
 use App::CriticDB::Collector;
 use App::CriticDB::DB;
+use App::CriticDB::Report;
 
 our $VERSION='0.0.3';
 
@@ -44,13 +45,8 @@ sub collect {
 sub report {
 	my ($self,%opt)=@_;
 	$self->_load();
-	while(my ($fn,$record)=each %{$$self{db}{store}{file}}) {
-	foreach my $violation (@{$$record{violations}}) {
-		print sprintf("%s: %s at line %d, column %d.  (Severity: %d)\n"
-			,$fn
-			,@$violation{qw/desc line col sev/}
-			);
-	} }
+	my $report=App::CriticDB::Report->new(verbose=>$opt{verbose});
+	while(my $violation=$$self{db}->report()) { print $report->text($violation) }
 	return $self;
 }
 

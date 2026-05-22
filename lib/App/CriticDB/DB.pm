@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use Carp qw/confess/;
+use Perl::Critic::Violation;
 
 use App::CriticDB::DB::Index;
 
@@ -121,6 +122,31 @@ sub cleanup {
 
 sub read  { confess('Unimplemented abstract') }
 sub write { confess('Unimplemented abstract') }
+
+my @reportIterator;
+sub report {
+	my ($self)=@_;
+	if(!@reportIterator) {
+		@reportIterator=map {[$_]} sort keys %{$$self{store}{file}};
+		push @reportIterator,[]; # terminate the iterator
+	}
+	while(@reportIterator) {
+		my ($fn,$violation)=@{shift(@reportIterator)};
+		if($violation) { return $violation }
+		if(!$fn)       { return }
+		my @violations;
+		foreach my $V (@{$$self{store}{file}{$fn}{violations}}) {
+			my $violation=Perl::Critic::Violation->new(@$V{qw/desc expl/},bless({},'PPI::Statement'),$$V{sev});
+			$$violation{_filename}=$fn;
+			$$violation{_source}=$$V{code};
+			$$violation{_policy}=$$self{store}{index}{policy}->value($$V{policy});
+			@{$$violation{_location}}[2..4]=(@$V{qw/col line/},$fn);
+			push @violations,[$fn,$violation];
+		}
+		unshift(@reportIterator,@violations);
+	}
+	return;
+}
 
 1;
 
