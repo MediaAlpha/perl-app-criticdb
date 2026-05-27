@@ -8,7 +8,7 @@ use PPI::Statement;
 use Test::More tests=>1;
 
 subtest 'Default'=>sub {
-	plan tests=>3;
+	plan tests=>5;
 	my ($report,@violations,$expect,$violation);
 	#
 	$expect='';
@@ -21,6 +21,7 @@ subtest 'Default'=>sub {
 	push @violations,$violation;
 	$report=App::CriticDB::Report->new(violations=>\@violations);
 	is($report->text(),$expect,'One violation');
+	is($report->text($violation),$expect,'Single violation formatting');
 	#
 	$expect.="f2: d2 at line 4, column 3.  (Severity: 2)\n";
 	$violation=Perl::Critic::Violation->new('d2','e2',bless({},'PPI::Statement'),'2');
@@ -28,5 +29,9 @@ subtest 'Default'=>sub {
 	push @violations,$violation;
 	$report=App::CriticDB::Report->new(violations=>\@violations);
 	is($report->text(),$expect,'Two violations');
+	#
+	$expect='f1 P::1 1;f2 P::2 2;';
+	$report=App::CriticDB::Report->new(verbose=>'%f %p %s;',violations=>\@violations);
+	is($report->text(),$expect,'Verbose/formatting');
 };
 
