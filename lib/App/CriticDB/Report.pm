@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use Perl::Critic::Violation;
 
+our $VERSION='0.0.4';
+
 sub new {
 	my ($ref,%opt)=@_;
 	my $class=ref($ref)||$ref;
@@ -37,7 +39,7 @@ App::CriticDB::Report - Build reports of violations
 
 =head1 VERSION
 
-Version 0.0.3
+Version 0.0.4
 
 =head1 SYNOPSIS
 
