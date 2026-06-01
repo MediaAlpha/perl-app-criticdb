@@ -18,6 +18,7 @@
 			},
 			"suggests": {
 				"Data::Dumper": "2.183",
+				"File::Temp": "0.2301",
 				"Getopt::Long": "2.58",
 				"Pod::Usage": "1.64",
 				"Storable": "0"

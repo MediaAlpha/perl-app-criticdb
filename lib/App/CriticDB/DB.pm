@@ -56,6 +56,7 @@ sub _filemtime {
 
 sub _fileNewer {
 	my ($self,$fn,$ts)=@_;
+	if(!$ts) { return }
 	my $tm=_filemtime($fn);
 	if(!$tm) { return }
 	return ($tm>$ts);
