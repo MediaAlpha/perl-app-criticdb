@@ -41,7 +41,7 @@ sub write {
 		if($message) { confess("Failed to $message") }
 		confess($raw);
 	};
-	$fh=File::Temp->new(TEMPLATE=>"$$self{file}-XXXXXXXX",UNLINK=>0,SUFFIX=>'.tmp');
+	$fh=File::Temp->new(TEMPLATE=>"$$self{file}-XXXXXXXX",UNLINK=>0,SUFFIX=>'.tmp',PERMS=>(0666&(~umask())));
 	$tmpname=$fh->filename();
 	nstore_fd($$self{store},$fh)    or &$failed("write to $tmpname");
 	close($fh)                      or &$failed("fully write to $tmpname");
