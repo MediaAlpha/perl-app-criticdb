@@ -73,7 +73,7 @@ Version 0.0.6
   $criticdb->collect(pathspec, ...);
   $criticdb->report();
 
-Or called via commandline
+Or called via command line
 
   perlcriticdb --file=filename.stor --profile=perlcritic.rc /path/to/files
 
@@ -123,7 +123,7 @@ The collector will re-verify the existence of all files at the beginning of each
 
 =head2 Collection
 
-Newer file discovery:  Add support for any combination of timestamp/filesize/MD5 method for determining files that need scanned.
+Newer file discovery:  Add support for any combination of timestamp/filesize/MD5 method for determining files that need to be scanned.
 
 File deletion currently always happens.  Add an option to retain missing files.
 
